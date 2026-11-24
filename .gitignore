@@ -11,3 +11,4 @@ local.properties
 .swiftpm/
 DerivedData/
 .DS_Store
+package-lock.json
