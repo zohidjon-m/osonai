@@ -31,8 +31,11 @@ Put the server and key next to the app's other config (constants file, `.env` th
    Replace `__HARNESS__` with the relative path to `harness/`, `__CONFIG__` with the config module, and
    `__TITLE__` with "<App name> assistant". Change nothing else. If the app's `tsconfig` lacks
    `"resolveJsonModule": true`, add it.
-4. **Open it:** register the screen in the app's navigator, and add one way to reach it where the app keeps
-   its main actions: a tab, or a header button labelled "Ask". Pass:
+4. **Open it:** register the screen in the app's navigator the same way its other screens are (an app with its
+   own navigation, no library: add a route next to the others), and add one way to reach it where the app keeps
+   its main actions: a tab, a header button, or a button labelled "Ask". If the screen is not inside the
+   app's safe area already, wrap it in a view with the safe-area insets as padding and the app's background
+   color. Pass:
    - `context`: the manifest's `context` values from the current screen (route name, the open item's id
      and name);
    - `onClose`: go back;

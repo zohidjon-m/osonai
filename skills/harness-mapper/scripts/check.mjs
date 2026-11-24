@@ -18,7 +18,8 @@ const STATUSES = ["needs_review", "approved", "rejected"];
 const CALL_TYPES = ["api_client", "store_action", "mutation", "navigation", "local", "raw_http"];
 const NAME_RE = /^[a-z][a-z0-9]*(_[a-z0-9]+)*$/;
 const ID_RE = /(^id$|_id$|Id$|_ids$|Ids$)/;
-const IDENTITY_RE = /(user_?id|account_?id|owner_?id|member_?id|token|session|password|^auth)/i;
+// The signed-in user's identity. Not member_id or owner_id: in many apps those are other people the user picks.
+const IDENTITY_RE = /(user_?id|account_?id|token|session|password|^auth)/i;
 
 const isObj = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
 const has = (o, k) => isObj(o) && Object.hasOwn(o, k);

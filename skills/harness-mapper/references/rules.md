@@ -62,6 +62,9 @@ The model doesn't know that "TOPIK" is `fld_8f2c`. It never fills an ID.
 3. The tool takes the name (`folder_name`) and `resolve` turns it into the ID the function needs
    (`"folder_name": { "resolver": "folder", "to_param": "folderId" }`).
 
+The SDK calls the resolver's read tool **with no arguments**, so its binding must work with none: default to
+what the app shows now (the selected group or account), or list everything the user can see.
+
 The SDK does the matching on the phone: one match runs, several show a choice, none asks. Set
 `"preload": true` on a resolver's read tool when the list is small and belongs to the user (folders, lists).
 
