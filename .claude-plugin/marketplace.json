@@ -1,0 +1,12 @@
+{
+  "name": "osonai",
+  "description": "Osonai: add an in-app assistant to your mobile app.",
+  "owner": { "name": "Osonai" },
+  "plugins": [
+    {
+      "name": "osonai",
+      "source": "./",
+      "description": "Add the Osonai assistant to your app: tool mapping, SDK install and chat screen."
+    }
+  ]
+}

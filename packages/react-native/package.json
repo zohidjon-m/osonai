@@ -1,0 +1,51 @@
+{
+  "name": "@osonai/react-native",
+  "version": "0.1.0",
+  "description": "Osonai chat for React Native apps: <OsonaiChat> hosts the Osonai chat bundle in react-native-webview and runs the app's own tool functions.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zohidjon-m/osonai.git",
+    "directory": "packages/react-native"
+  },
+  "homepage": "https://github.com/zohidjon-m/osonai/tree/main/packages/react-native#readme",
+  "keywords": [
+    "react-native",
+    "ai",
+    "agent",
+    "chat",
+    "assistant",
+    "osonai"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p .",
+    "prepack": "tsc -p ."
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-webview": ">=13"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.1",
+    "react": "19.3.0",
+    "react-native": "0.88.0",
+    "react-native-webview": "14.0.1",
+    "typescript": "^7.0.2"
+  }
+}

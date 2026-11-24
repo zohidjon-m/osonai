@@ -1,0 +1,5 @@
+# JitPack builds the Android library from this repository.
+jdk:
+  - openjdk17
+install:
+  - cd packages/android && ./gradlew :osonai:publishToMavenLocal

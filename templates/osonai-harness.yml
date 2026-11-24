@@ -1,0 +1,32 @@
+# Keeps harness/ (the tools the Osonai assistant can call) in sync with your code.
+# Setup, once: gh secret set ANTHROPIC_API_KEY   (or CLAUDE_CODE_OAUTH_TOKEN from `claude setup-token`)
+name: osonai-harness
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: write        # push the harness commit to the PR branch
+  pull-requests: write   # post the one review comment
+
+jobs:
+  harness:
+    # Fork PRs can't read secrets, so skip them.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: OWNER/osonai-sdk/actions/harness@v1   # replace OWNER with where the action is published
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # app_dir: apps/mobile          # if the app is not at the repo root
+          # typecheck: npx tsc --noEmit   # needs the app's dependencies installed in an earlier step
