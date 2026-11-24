@@ -11,48 +11,33 @@ The chat screen, the agent loop and the connection to the Osonai server are one 
 own tool functions. They run in the host app, with the host app's own signed-in user token. The token never
 goes to the chat page. The bridge protocol is in `docs/mobile.md`.
 
-Coordinates: `ai.osonai:osonai-android:0.1.0`. It depends on `kotlinx-coroutines-android` 1.9.0 (as `api`) and
-`kotlin-stdlib` 2.1.20.
+Coordinates: `com.github.zohidjon-m:osonai:0.1.0` on [JitPack](https://jitpack.io/#zohidjon-m/osonai). It depends
+on `kotlinx-coroutines-android` 1.9.0 (as `api`) and `kotlin-stdlib` 2.1.20.
 
 ## Install
 
-Today the library installs from Maven Local (see "Known limits").
-
-1. Publish it once on the build machine (JDK 17; the test used the SDKMAN JDK `17.0.17-zulu`):
-
-   ```sh
-   cd packages/android
-   export JAVA_HOME=$HOME/.sdkman/candidates/java/17.0.17-zulu ANDROID_HOME=$HOME/Library/Android/sdk
-   ./gradlew :osonai:assembleRelease :osonai:publishToMavenLocal
-   ```
-
-   This writes `~/.m2/repository/ai/osonai/osonai-android/0.1.0/` (the AAR, the sources JAR, the POM and the
-   Gradle module file).
-
-2. In your app's `settings.gradle.kts`, add `mavenLocal()`:
+1. In your app's `settings.gradle.kts`, add JitPack:
 
    ```kotlin
    dependencyResolutionManagement {
        repositories {
            google()
            mavenCentral()
-           mavenLocal()
+           maven("https://jitpack.io")
        }
    }
    ```
 
-3. In your app module's `build.gradle.kts`:
+2. In your app module's `build.gradle.kts`:
 
    ```kotlin
    dependencies {
-       implementation("ai.osonai:osonai-android:0.1.0")
+       implementation("com.github.zohidjon-m:osonai:0.1.0")
    }
    ```
 
-**Manual install** (not tested): copy `packages/android/osonai/build/outputs/aar/osonai-release.aar` into your
-app, add `implementation(files("libs/osonai-release.aar"))`, and add
-`implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")` and
-`implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")` yourself (a file has no POM).
+**From source:** `cd packages/android && ./gradlew :osonai:publishToMavenLocal` (JDK 17) writes
+`ai.osonai:osonai-android:0.1.0` to Maven Local; add `mavenLocal()` to your repositories and use those coordinates.
 
 The steps that built Bozor, our test app, in `examples/shop/android` (Android Gradle Plugin 8.11.0, Kotlin
 2.1.20, Gradle 8.14.3, compileSdk 35):
@@ -233,7 +218,7 @@ never exposed to another page. The library's consumer R8 rules keep the bridge m
 
 ## Known limits
 
-- No remote Maven repository yet: each build machine runs `publishToMavenLocal` first.
+- Published on JitPack only, not on Maven Central yet.
 - The view does not apply window insets. Give it the area between the system bars and above the keyboard:
   `fitsSystemWindows = true` on its parent (what the test app does; with targetSdk 35 Android 15 draws
   edge to edge) and `android:windowSoftInputMode="adjustResize"`. With these two settings the input stays

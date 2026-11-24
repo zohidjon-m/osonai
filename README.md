@@ -31,7 +31,7 @@ changed and posts one review comment.
 | Platform | Install | Docs |
 |---|---|---|
 | React Native | `npm install @osonai/react-native react-native-webview` | [packages/react-native](packages/react-native) |
-| Android | JitPack: `com.github.zohidjon-m.osonai:osonai-android:0.1.0` | [packages/android](packages/android) |
+| Android | JitPack: `com.github.zohidjon-m:osonai:0.1.0` | [packages/android](packages/android) |
 | iOS | Swift package `https://github.com/zohidjon-m/osonai` | [packages/ios](packages/ios) |
 
 The bridge between the app and the chat page: [docs/mobile.md](docs/mobile.md). The mapping skill:
