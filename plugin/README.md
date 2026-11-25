@@ -63,6 +63,8 @@ these to the language model provider it uses (currently DeepSeek) to write the r
 - The tools run on the phone with the user's own login; the server never gets your backend credentials.
 - Tools that delete data always ask the user on the phone first.
 
+The full privacy policy: https://github.com/zohidjon-m/osonai/blob/main/PRIVACY.md
+
 ## More
 
 - The SDKs, the GitHub Action and the full docs: https://github.com/zohidjon-m/osonai

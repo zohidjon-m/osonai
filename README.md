@@ -37,6 +37,10 @@ changed and posts one review comment.
 The bridge between the app and the chat page: [docs/mobile.md](docs/mobile.md). The mapping skill:
 [plugin/skills/harness-mapper](plugin/skills/harness-mapper).
 
+## Privacy
+
+What the plugin and the assistant handle: [PRIVACY.md](PRIVACY.md).
+
 ## License
 
 MIT

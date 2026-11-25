@@ -17,5 +17,6 @@
   "license": "MIT",
   "icon": "./.claude-plugin/icon.png",
   "documentationUrl": "https://github.com/zohidjon-m/osonai/tree/main/plugin",
-  "supportUrl": "https://github.com/zohidjon-m/osonai/issues"
+  "supportUrl": "https://github.com/zohidjon-m/osonai/issues",
+  "privacyPolicyUrl": "https://github.com/zohidjon-m/osonai/blob/main/PRIVACY.md"
 }
