@@ -14,5 +14,8 @@
   ],
   "homepage": "https://github.com/zohidjon-m/osonai",
   "repository": "https://github.com/zohidjon-m/osonai",
-  "license": "MIT"
+  "license": "MIT",
+  "icon": "./.claude-plugin/icon.png",
+  "documentationUrl": "https://github.com/zohidjon-m/osonai/tree/main/plugin",
+  "supportUrl": "https://github.com/zohidjon-m/osonai/issues"
 }
