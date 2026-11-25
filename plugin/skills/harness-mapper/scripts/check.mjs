@@ -20,6 +20,9 @@ const NAME_RE = /^[a-z][a-z0-9]*(_[a-z0-9]+)*$/;
 const ID_RE = /(^id$|_id$|Id$|_ids$|Ids$)/;
 // The signed-in user's identity. Not member_id or owner_id: in many apps those are other people the user picks.
 const IDENTITY_RE = /(user_?id|account_?id|token|session|password|^auth)/i;
+// A function name that starts with a verb that changes data: addToCart, delete_item, setTheme.
+const WRITE_VERB_RE =
+  /^(create|add|update|delete|remove|set|send|post|put|patch|save|edit|clear|reset|archive|toggle|submit|cancel|join|leave|invite|rename|move|upload|mark|pay|buy|order|book|apply)(?=[A-Z_]|$)/;
 
 const isObj = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
 const has = (o, k) => isObj(o) && Object.hasOwn(o, k);
@@ -44,7 +47,7 @@ function checkTool(t, i, p, resolvers, kinds) {
   if (t.name.startsWith("osonai_")) p.push(`${w}: the osonai_ prefix is reserved`);
   if (typeof t.description !== "string" || !t.description) p.push(`${w}: missing description`);
   if (!KINDS.includes(t.kind)) p.push(`${w}: kind must be one of ${KINDS.join(", ")}`);
-  if (!CONFIRMATIONS.includes(t.confirmation)) p.push(`${w}: confirmation must be none or confirm`);
+  if (!CONFIRMATIONS.includes(t.confirmation)) p.push(`${w}: confirmation must be one of ${CONFIRMATIONS.join(", ")}`);
   if (!STATUSES.includes(t.status)) p.push(`${w}: status must be approved, needs_review or rejected`);
   if (t.preload && t.kind !== "read") p.push(`${w}: preload is only for read tools`);
 
@@ -102,6 +105,15 @@ function checkTool(t, i, p, resolvers, kinds) {
   if (t.kind === "destructive" && t.confirmation !== "confirm") p.push(`${w}: destructive tools need confirmation "confirm"`);
   if ((t.kind === "read" || t.kind === "write") && !(Array.isArray(t.output_fields) && t.output_fields.length)) {
     p.push(`${w}: read and write tools need output_fields (only what the agent needs)`);
+  }
+
+  // Safety: read, navigate and local tools are approved without review, so one bound to a function that
+  // sounds like it changes data must be a write tool, or wait for the developer.
+  if (["read", "navigate", "local"].includes(t.kind) && t.status === "approved" && isObj(b) && b.target) {
+    const symbol = String(b.target).split(/[.#:/]/).pop().replace(/\(.*$/, "");
+    if (WRITE_VERB_RE.test(symbol)) {
+      p.push(`${w}: '${b.target}' sounds like it changes data, but the tool is ${t.kind} and approved; make it write (needs_review), or set status needs_review`);
+    }
   }
 
   if (t.view !== undefined) checkView(t.view, `${w}: view`, p);

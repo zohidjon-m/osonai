@@ -5,7 +5,7 @@
   "plugins": [
     {
       "name": "osonai",
-      "source": "./",
+      "source": "./plugin",
       "description": "Add the Osonai assistant to your app: tool mapping, SDK install and chat screen."
     }
   ]

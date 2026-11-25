@@ -70,7 +70,7 @@ runs:
         prompt: |
           CI mode. No one can answer questions: never ask, never stop for approval.
 
-          Read ${{ github.action_path }}/../../skills/harness-mapper/SKILL.md and follow it. Its references
+          Read ${{ github.action_path }}/../../plugin/skills/harness-mapper/SKILL.md and follow it. Its references
           and scripts are in the same folder.
           The app is in `${{ inputs.app_dir }}`.
           ${{ steps.scope.outputs.mode == 'first' && 'This is a FIRST RUN.' || 'This is an UPDATE RUN.' }}
@@ -85,7 +85,7 @@ runs:
           --model ${{ inputs.model }}
           --max-turns ${{ inputs.max_turns }}
           --add-dir ${{ github.action_path }}/../.. --add-dir ${{ runner.temp }}
-          --allowedTools "Read,Glob,Grep,Write(**/harness/**),Edit(**/harness/**),Write(**/OsonaiTools.kt),Edit(**/OsonaiTools.kt),Write(**/OsonaiTools.swift),Edit(**/OsonaiTools.swift),Write(${{ runner.temp }}/**),Edit(${{ runner.temp }}/**),Bash(node ${{ github.action_path }}/../../skills/harness-mapper/scripts/check.mjs:*)"
+          --allowedTools "Read,Glob,Grep,Write(**/harness/**),Edit(**/harness/**),Write(**/OsonaiTools.kt),Edit(**/OsonaiTools.kt),Write(**/OsonaiTools.swift),Edit(**/OsonaiTools.swift),Write(${{ runner.temp }}/**),Edit(${{ runner.temp }}/**),Bash(node ${{ github.action_path }}/../../plugin/skills/harness-mapper/scripts/check.mjs:*)"
 
     - name: Check the harness (no model)
       if: steps.gate.outputs.run == 'true'
@@ -95,7 +95,7 @@ runs:
         TYPECHECK: ${{ inputs.typecheck }}
       run: |
         set -euo pipefail
-        node "${{ github.action_path }}/../../skills/harness-mapper/scripts/check.mjs" harness/manifest.json --root .
+        node "${{ github.action_path }}/../../plugin/skills/harness-mapper/scripts/check.mjs" harness/manifest.json --root .
         if [ -n "$TYPECHECK" ]; then bash -c "$TYPECHECK"; fi
 
     - name: Commit the harness to the pull request

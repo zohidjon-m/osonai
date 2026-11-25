@@ -22,7 +22,7 @@ Get your app key (`osk_pub_…`) from the Osonai team.
 
 ## Keep it in sync
 
-Copy [`templates/osonai-harness.yml`](templates/osonai-harness.yml) to `.github/workflows/` and add the secret
+Copy [`plugin/templates/osonai-harness.yml`](plugin/templates/osonai-harness.yml) to `.github/workflows/` and add the secret
 `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`). On every pull request it updates `harness/` for the code that
 changed and posts one review comment.
 
@@ -35,7 +35,7 @@ changed and posts one review comment.
 | iOS | Swift package `https://github.com/zohidjon-m/osonai` | [packages/ios](packages/ios) |
 
 The bridge between the app and the chat page: [docs/mobile.md](docs/mobile.md). The mapping skill:
-[skills/harness-mapper](skills/harness-mapper).
+[plugin/skills/harness-mapper](plugin/skills/harness-mapper).
 
 ## License
 

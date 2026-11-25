@@ -1,6 +1,6 @@
 {
   "name": "osonai",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Add the Osonai assistant to your app. Maps your app's features into tools the assistant can call, installs the SDK and adds the chat screen. Your code is read locally by your own Claude Code and goes nowhere else.",
   "author": {
     "name": "Osonai"
