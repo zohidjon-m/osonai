@@ -68,5 +68,4 @@ We update this page when how we handle data changes, and change the date at the 
 
 ## Contact
 
-Open an issue at https://github.com/zohidjon-m/osonai/issues. Don't put personal data in the issue: say what
-you need, and we reply with a private way to send the details.
+Email info@oson.ai.
