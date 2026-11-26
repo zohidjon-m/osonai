@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: zohidjon-m/osonai/actions/harness@v1
+      - uses: zohidjon-m/osonai/actions/harness@9f33d2023aac25db2e49e3ba3a841ebfab0dd60a  # pinned commit
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

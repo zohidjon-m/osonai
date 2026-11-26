@@ -18,7 +18,10 @@ Put the server and key next to the app's other config (constants file, `.env` th
 
 ## React Native
 
-1. **Dependencies:** `npm install @osonai/react-native react-native-webview` (or the app's package manager).
+1. **Dependencies:** `npm install --save-exact @osonai/react-native@0.1.0 react-native-webview` (or the app's
+   package manager, with the exact version). Then check that the lockfile records `@osonai/react-native` 0.1.0 with
+   integrity `sha512-EVfuHdA4UrF6i+5gU39nQD+q6jLlo4L80cM8Dr6kO4qmIb3zjQuV3W7kxLOOIyi4pPxQn7Hz28c2Osixe6k/cQ==`;
+   if it records anything else, stop and tell the developer.
    Then, if the app has an `ios/` folder: `cd ios && pod install` (macOS only; otherwise tell
    the developer to run it).
 2. **Config:** add `OSONAI_URL` and `OSONAI_APP_KEY` to the app's config module (create `src/osonai.config.ts`
@@ -82,7 +85,8 @@ Put the server and key next to the app's other config (constants file, `.env` th
 ## Android
 
 1. **Dependency:** add `maven("https://jitpack.io")` to the repositories in `settings.gradle.kts` (if it isn't
-   there), and `implementation("com.github.zohidjon-m:osonai:0.1.0")` to the app module.
+   there), and `implementation("com.github.zohidjon-m:osonai:b5fc2566eb")` to the app module. The version is the
+   commit of release 0.1.0, so the build is pinned to exactly that code.
 2. **Config:** `OSONAI_URL` and `OSONAI_APP_KEY` as `buildConfigField`s (or the app's own config object).
 3. **Manifest and design:** copy `harness/manifest.json` and `harness/design.json` into
    `app/src/main/assets/osonai/`. Say that the copies must be refreshed when the harness changes (or add a
@@ -97,7 +101,9 @@ Put the server and key next to the app's other config (constants file, `.env` th
 
 ## iOS
 
-1. **Dependency:** the Swift package `https://github.com/zohidjon-m/osonai`, from `0.1.0`, product `OsonaiSDK`.
+1. **Dependency:** the Swift package `https://github.com/zohidjon-m/osonai` at commit
+   `b5fc2566eb67be4f17eb4270dc0088fa71f60a4c` (release 0.1.0; in Xcode the dependency rule "Commit", in
+   `Package.swift` `revision:`), product `OsonaiSDK`.
    Editing `project.pbxproj` by hand breaks projects: tell the developer to add it (Xcode → File → Add Package
    Dependencies), unless the app uses `Package.swift` or XcodeGen / Tuist, where you add it in that file.
 2. **Config:** `OSONAI_URL` and `OSONAI_APP_KEY` in the app's config (constants file or `Info.plist`).
