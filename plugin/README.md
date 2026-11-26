@@ -46,7 +46,7 @@ In your app's repository:
 |---|---|
 | Reads | your repository, on your machine |
 | Writes | `harness/`; the tools file in your app's sources (Android, iOS); and, after you approve the install, your dependency file, one config file, one chat screen and the place you open it from. Mapping notes go to a temporary file outside the repository and are deleted at the end |
-| Runs | `curl` to the Osonai manifest check; your own typecheck or build (`npx tsc --noEmit`, `./gradlew`, `xcodebuild`); during the install, your package manager (`npm install @osonai/react-native react-native-webview`, `pod install`) or a Gradle dependency from JitPack |
+| Runs | one HTTPS request to the Osonai manifest check; your own typecheck or build (TypeScript, Gradle or Xcode); during the install, your own package manager adds `@osonai/react-native` and `react-native-webview` (npm, CocoaPods) or the Gradle dependency from JitPack |
 | Network | the Osonai manifest check, which gets only `harness/manifest.json` (tool names, descriptions, the names and files of the functions they call; no source code), keeps nothing and needs no key; and your package registry during the install. Your code goes nowhere else: Claude Code reads it with the model account you already use |
 | Doesn't | call your app's backend, commit or push, or change files outside the list above |
 

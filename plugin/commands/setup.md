@@ -14,7 +14,8 @@ Use the harness-mapper skill on the app in the current directory, in interactive
   key), and how to open the chat.
 - Then offer once to keep the tools in sync on every pull request. If they say yes, copy
   `${CLAUDE_PLUGIN_ROOT}/templates/osonai-harness.yml` to `.github/workflows/osonai-harness.yml` and tell them
-  to run `gh secret set ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN` from `claude setup-token`).
+  to add their model key as a repository secret named `ANTHROPIC_API_KEY` in the repository's GitHub settings.
+  Never read, ask for or handle the key yourself.
 
 The code never leaves this machine except to your own model provider. Call no network service except the
 Osonai manifest check (step 5, which gets only `harness/manifest.json`) and the package registry during the

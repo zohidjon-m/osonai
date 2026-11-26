@@ -1,5 +1,5 @@
 # Keeps harness/ (the tools the Osonai assistant can call) in sync with your code.
-# Setup, once: gh secret set ANTHROPIC_API_KEY   (or CLAUDE_CODE_OAUTH_TOKEN from `claude setup-token`)
+# Setup, once: add the repository secret ANTHROPIC_API_KEY (or CLAUDE_CODE_OAUTH_TOKEN) in the repository settings.
 name: osonai-harness
 
 on:
