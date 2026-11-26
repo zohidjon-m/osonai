@@ -11,6 +11,7 @@
 9. Views
 10. Screen context
 11. What doesn't become a tool
+12. Checklist
 
 ## 1. One tool per intent
 
@@ -139,3 +140,36 @@ agent need. The install step makes the app send them.
 - `excluded`: payments, purchases, money; account deletion; password, login and auth changes; admin-only.
 - An action that needs a permission prompt the first time (camera, microphone) is a tool; mention the
   permission in its description.
+
+## 12. Checklist
+
+The Osonai check (SKILL.md step 5) tests all of this. Go through it yourself only when the check can't be
+reached.
+
+**Errors** (the app's chat would refuse to open):
+
+- `manifest_version` is 1; `app.name` is set; `tools` is a list.
+- Every tool: a unique snake_case `name` not starting with `osonai_`; a `description`; `kind` is `read`,
+  `write`, `destructive`, `navigate` or `local`; `confirmation` is `none`, `undo` or `confirm`; `status` is
+  `approved`, `needs_review` or `rejected`; `params` is a JSON Schema object whose `required` names are all
+  in `properties`.
+- `destructive` tools have `confirmation: "confirm"`.
+- `preload` only on `read` tools.
+- No param says who the user is or carries a credential: `user_id`, `userId`, `token`, `access_token`,
+  `session_id`, `password`, `api_key`, … (the whole name; `author` or `session_name` are fine).
+- `bound`: each entry is `{ "from": "context.<name>" }`; `overridable` needs a param of the same name,
+  `overridable_by` a param with that name; identity is never overridable; a bound param is not `required`.
+- `resolve`: each entry names a param that exists, and is `{ resolver, to_param }` with a known resolver.
+- `resolvers`: each has `tool`, `id_field` and `name_field`, and its tool is a `read` tool.
+- A `view`'s `type` is `list` or `detail`, it has a `title`, and `layout` is `cards` or `rows`.
+
+**Warnings** (fix them too):
+
+- Names are `verb_object`: `add_to_cart`.
+- `read` and `write` tools have a non-empty `output_fields`.
+- No param is an ID (`id`, `…_id`, `…Id`) unless `resolve` or `bound` fills it.
+- `binding` has `target` and a known `call_type`; `sources` has at least one line.
+- Every param has a `type` (or `enum`) and a `description`.
+- No `approved` `read`, `navigate` or `local` tool is bound to a function that starts with a verb that
+  changes data (`add…`, `set…`, `delete…`, `send…`, …): make it `write`, or leave it `needs_review`.
+- Each `excluded` and `gaps` entry has `action` and `reason`.

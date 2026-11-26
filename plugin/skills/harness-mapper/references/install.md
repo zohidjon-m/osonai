@@ -27,15 +27,52 @@ Put the server and key next to the app's other config (constants file, `.env` th
    export const OSONAI_URL = 'https://sdk.oson.ai';
    export const OSONAI_APP_KEY = 'osk_pub_…';
    ```
-3. **Chat screen:** copy `<skill-dir>/assets/react-native/OsonaiScreen.tsx` into the app's screens folder.
-   Replace `__HARNESS__` with the relative path to `harness/`, `__CONFIG__` with the config module, and
-   `__TITLE__` with "<App name> assistant". Change nothing else. If the app's `tsconfig` lacks
-   `"resolveJsonModule": true`, add it.
+3. **Chat screen:** write this file as `OsonaiScreen.tsx` in the app's screens folder. Replace `__HARNESS__`
+   with the relative path to `harness/`, `__CONFIG__` with the config module, and `__TITLE__` with
+   "<App name> assistant". Change nothing else. If the app's `tsconfig` lacks `"resolveJsonModule": true`,
+   add it.
+
+   ```tsx
+   // Osonai chat screen. Added by the Osonai setup; the tools are in harness/bindings.ts.
+   import { OsonaiChat } from '@osonai/react-native';
+   import manifest from '__HARNESS__/manifest.json';
+   import design from '__HARNESS__/design.json';
+   import { tools } from '__HARNESS__/bindings';
+   import { OSONAI_APP_KEY, OSONAI_URL } from '__CONFIG__';
+
+   type Props = {
+     /** What is on screen now, with the names of harness/manifest.json "context". */
+     context?: Record<string, unknown>;
+     onClose?: () => void;
+     /** A tap on a chat card: open the app's screen of that kind for that item. */
+     onOpen?: (kind: string, id: string) => void;
+   };
+
+   export function OsonaiScreen({ context, onClose, onOpen }: Props) {
+     return (
+       <OsonaiChat
+         runtimeUrl={OSONAI_URL}
+         appKey={OSONAI_APP_KEY}
+         manifest={manifest}
+         tools={tools}
+         design={design}
+         views
+         context={context}
+         title="__TITLE__"
+         showClose={!!onClose}
+         onClose={onClose}
+         onOpen={onOpen}
+       />
+     );
+   }
+   ```
 4. **Open it:** register the screen in the app's navigator the same way its other screens are (an app with its
    own navigation, no library: add a route next to the others), and add one way to reach it where the app keeps
    its main actions: a tab, a header button, or a button labelled "Ask". If the screen is not inside the
    app's safe area already, wrap it in a view with the safe-area insets as padding and the app's background
-   color. Pass:
+   color. If the app draws its screens on top of each other (its own navigation, no library), give that
+   wrapper `elevation: 50`: Android sends taps to the view with the highest elevation, so a bottom sheet or
+   card from the screen underneath would take the chat's taps. Pass:
    - `context`: the manifest's `context` values from the current screen (route name, the open item's id
      and name);
    - `onClose`: go back;

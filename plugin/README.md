@@ -29,7 +29,9 @@ In your app's repository:
    - `harness/bindings.ts` (React Native), or `OsonaiTools.kt` / `OsonaiTools.swift` in your app's sources:
      one short function per tool, calling your app's own code;
    - `harness/design.json`: your app's colors, so the chat matches it.
-3. **Checks the result** with `scripts/check.mjs` (included, no dependencies) and your own typecheck or build.
+3. **Checks the result**: sends `harness/manifest.json` to the Osonai check (`https://sdk.oson.ai/v1/osonai/manifest/check`),
+   which applies the same rules the Osonai server applies when your app's chat opens, then runs your own
+   typecheck or build.
 4. **Shows you a review list.** Tools that only read data are switched on. Tools that change or delete data
    stay off until you approve them. Payments, purchases, account deletion and login or password changes are
    never mapped.
@@ -44,8 +46,8 @@ In your app's repository:
 |---|---|
 | Reads | your repository, on your machine |
 | Writes | `harness/`; the tools file in your app's sources (Android, iOS); and, after you approve the install, your dependency file, one config file, one chat screen and the place you open it from. Mapping notes go to a temporary file outside the repository and are deleted at the end |
-| Runs | `node scripts/check.mjs`; your own typecheck or build (`npx tsc --noEmit`, `./gradlew`, `xcodebuild`); during the install, your package manager (`npm install @osonai/react-native react-native-webview`, `pod install`) or a Gradle dependency from JitPack |
-| Network | only your package registry during the install. The plugin sends your code nowhere: Claude Code reads it with the model account you already use |
+| Runs | `curl` to the Osonai manifest check; your own typecheck or build (`npx tsc --noEmit`, `./gradlew`, `xcodebuild`); during the install, your package manager (`npm install @osonai/react-native react-native-webview`, `pod install`) or a Gradle dependency from JitPack |
+| Network | the Osonai manifest check, which gets only `harness/manifest.json` (tool names, descriptions, the names and files of the functions they call; no source code), keeps nothing and needs no key; and your package registry during the install. Your code goes nowhere else: Claude Code reads it with the model account you already use |
 | Doesn't | call your app's backend, commit or push, or change files outside the list above |
 
 Claude Code asks you before each file change and command, as it always does.

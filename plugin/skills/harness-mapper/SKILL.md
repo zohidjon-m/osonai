@@ -12,6 +12,8 @@ signed-in user**, so they get the app's own auth, validation and screen refresh 
 ## Rules
 
 - **The code stays here.** Read it locally. Never send it anywhere, and never call the app's real services.
+  The one thing that leaves is `harness/manifest.json`, to the Osonai check in step 5 (the app sends the same
+  file to Osonai whenever its chat opens).
 - **Never invent.** Every tool traces to a real function you read. If you can't find one, the action goes in
   `gaps`, not in a tool.
 - **Write only in `harness/`** while mapping. The one exception: on Android and iOS the bindings file must sit
@@ -71,13 +73,22 @@ Status: `read`, `navigate` and `local` tools are `approved`. `write` and `destru
 
 ### 5. Check
 
+Send the manifest to the Osonai check. It runs the same rules the Osonai server applies when the app's chat
+opens, saves nothing, and needs no app key. Run this command exactly as written, with no extra flags: in CI
+only this exact command is allowed.
+
 ```bash
-node <skill-dir>/scripts/check.mjs harness/manifest.json --root .
+curl -sS -X POST https://sdk.oson.ai/v1/osonai/manifest/check -H "content-type: application/json" --data-binary @harness/manifest.json
 ```
 
-Fix every error and run it again until it passes. Then typecheck or compile the bindings with the app's own
-tools (`npx tsc --noEmit`, `./gradlew compileDebugKotlin`, `xcodebuild build`). A binding that doesn't
-compile means you guessed a name or a signature: read the code again. If the toolchain can't run here, say so.
+It answers `{ "ok", "errors", "warnings", "summary" }`. Fix every error and every warning, and send it again
+until `"ok": true`. An error means the app's chat would refuse to open. If the check can't be reached
+(offline), go through the checklist in `references/rules.md` §12 yourself, and say in the review list that
+the server check didn't run.
+
+Then typecheck or compile the bindings with the app's own tools (`npx tsc --noEmit`,
+`./gradlew compileDebugKotlin`, `xcodebuild build`). A binding that doesn't compile means you guessed a name
+or a signature: read the code again. If the toolchain can't run here, say so.
 
 ### 6. Review list
 

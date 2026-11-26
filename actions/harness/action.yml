@@ -71,7 +71,7 @@ runs:
           CI mode. No one can answer questions: never ask, never stop for approval.
 
           Read ${{ github.action_path }}/../../plugin/skills/harness-mapper/SKILL.md and follow it. Its references
-          and scripts are in the same folder.
+          are in the same folder.
           The app is in `${{ inputs.app_dir }}`.
           ${{ steps.scope.outputs.mode == 'first' && 'This is a FIRST RUN.' || 'This is an UPDATE RUN.' }}
           ${{ steps.scope.outputs.changed != '0' && format('The changed files are listed in {0}/osonai-changed.txt; look only at the actions they touch.', runner.temp) || '' }}
@@ -85,7 +85,7 @@ runs:
           --model ${{ inputs.model }}
           --max-turns ${{ inputs.max_turns }}
           --add-dir ${{ github.action_path }}/../.. --add-dir ${{ runner.temp }}
-          --allowedTools "Read,Glob,Grep,Write(**/harness/**),Edit(**/harness/**),Write(**/OsonaiTools.kt),Edit(**/OsonaiTools.kt),Write(**/OsonaiTools.swift),Edit(**/OsonaiTools.swift),Write(${{ runner.temp }}/**),Edit(${{ runner.temp }}/**),Bash(node ${{ github.action_path }}/../../plugin/skills/harness-mapper/scripts/check.mjs:*)"
+          --allowedTools "Read,Glob,Grep,Write(**/harness/**),Edit(**/harness/**),Write(**/OsonaiTools.kt),Edit(**/OsonaiTools.kt),Write(**/OsonaiTools.swift),Edit(**/OsonaiTools.swift),Write(${{ runner.temp }}/**),Edit(${{ runner.temp }}/**),Bash(curl -sS -X POST https://sdk.oson.ai/v1/osonai/manifest/check:*),Bash(curl -sS -m 20 -X POST https://sdk.oson.ai/v1/osonai/manifest/check:*)"
 
     - name: Check the harness (no model)
       if: steps.gate.outputs.run == 'true'
@@ -95,7 +95,14 @@ runs:
         TYPECHECK: ${{ inputs.typecheck }}
       run: |
         set -euo pipefail
-        node "${{ github.action_path }}/../../plugin/skills/harness-mapper/scripts/check.mjs" harness/manifest.json --root .
+        # The manifest rules: the same check the Osonai server runs when the app's chat opens.
+        RESULT="$RUNNER_TEMP/osonai-check.json"
+        curl -sS --fail-with-body -X POST https://sdk.oson.ai/v1/osonai/manifest/check -H "content-type: application/json" --data-binary @harness/manifest.json -o "$RESULT"
+        jq -r '(.errors[] | "error: " + .), (.warnings[] | "warning: " + .)' "$RESULT"
+        jq -r '.summary | "\(.tools) tools: \(.approved) approved, \(.needs_review) to review"' "$RESULT"
+        jq -e '.ok' "$RESULT" > /dev/null
+        # Drift: every binding still points at code that exists.
+        node "${{ github.action_path }}/drift.mjs" harness/manifest.json --root .
         if [ -n "$TYPECHECK" ]; then bash -c "$TYPECHECK"; fi
 
     - name: Commit the harness to the pull request
